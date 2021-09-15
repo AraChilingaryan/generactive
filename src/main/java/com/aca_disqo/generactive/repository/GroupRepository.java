@@ -3,17 +3,18 @@ package com.aca_disqo.generactive.repository;
 import com.aca_disqo.generactive.repository.model.Group;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GroupRepository {
 
-    Group create(Group group);
+    Optional<Group> create(Group group);
 
-    Group get(int id);
+    Optional<Group> get(Long id);
 
     List<Group> getAll();
 
-    void deleteById(int id);
+    void deleteById(Long id);
 
-    Group findGroupByName(String name);
+    Optional<Group> findGroupByName(String name);
 
 }

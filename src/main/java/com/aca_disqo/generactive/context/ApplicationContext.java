@@ -1,14 +1,13 @@
 package com.aca_disqo.generactive.context;
 
-import com.aca_disqo.generactive.container.Database;
 import com.aca_disqo.generactive.converter.GroupConverter;
 import com.aca_disqo.generactive.converter.ItemConverter;
 import com.aca_disqo.generactive.converter.impl.GroupConverterImpl;
 import com.aca_disqo.generactive.converter.impl.ItemConverterImpl;
 import com.aca_disqo.generactive.repository.GroupRepository;
 import com.aca_disqo.generactive.repository.ItemRepository;
-import com.aca_disqo.generactive.repository.impl.GroupRepositoryImpl;
-import com.aca_disqo.generactive.repository.impl.ItemRepositoryImpl;
+import com.aca_disqo.generactive.repository.jdbcimpl.GroupRepositoryImpl;
+import com.aca_disqo.generactive.repository.jdbcimpl.ItemRepositoryImpl;
 import com.aca_disqo.generactive.service.GroupService;
 import com.aca_disqo.generactive.service.ItemService;
 import com.aca_disqo.generactive.service.impl.GroupServiceImpl;
@@ -61,7 +60,4 @@ public class ApplicationContext {
         return ItemRepositoryImpl.getInstance();
     }
 
-    public Database getDatabase(){
-        return Database.getInstance();
-    }
 }

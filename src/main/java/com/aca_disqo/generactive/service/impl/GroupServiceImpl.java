@@ -26,19 +26,19 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public Group create(GroupDTO groupDTO) {
-        return groupRepository.create(createGroupFrom(groupDTO));
+        return groupRepository.create(createGroupFrom(groupDTO)).get();
     }
 
     @Override
-    public Group get(int id) {
-        return groupRepository.get(id);
+    public Group get(Long id) {
+        return groupRepository.get(id).orElseThrow(() -> new RuntimeException("No group by this id"));
     }
 
     @Override
-    public Group update(int id, GroupDTO groupDTO) {
-        final Group group = groupRepository.get(id);
-        group.setName(groupDTO.getName());
-        group.setParentGroup(groupRepository.get(groupDTO.getParentId()));
+    public Group update(Long id, GroupDTO groupDTO) {
+        final Group group = groupRepository.get(id).get();
+//        group.setName(groupDTO.getName());
+//        group.setParentGroup(groupRepository.get(groupDTO.getParentId()));
         return group;
     }
 
@@ -48,20 +48,20 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Long id) {
         groupRepository.deleteById(id);
     }
 
     @Override
     public Group findGroupByName(String name) {
-        return groupRepository.findGroupByName(name);
+        //return groupRepository.findGroupByName(name);
+        return null;
     }
 
     private Group createGroupFrom(GroupDTO groupDTO) {
         final Group group = new Group();
-        group.setId(groupDTO.getId());
         group.setName(groupDTO.getName());
-        if (groupDTO.getParentId() != 0) {
+        if (groupDTO.getParentId() != null) {
             Group parentGroup = get(groupDTO.getParentId());
             parentGroup.getSubGroups().add(group);
             group.setParentGroup(parentGroup);

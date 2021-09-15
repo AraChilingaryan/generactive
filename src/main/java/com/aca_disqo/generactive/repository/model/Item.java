@@ -5,7 +5,7 @@ import com.aca_disqo.generactive.utils.Currency;
 
 public abstract class Item {
 
-    private int id;
+    private Long id;
     private int basePrice;
     private String name;
     private String imageUrl;
@@ -15,17 +15,17 @@ public abstract class Item {
     public Item() {
     }
 
-    public Item(int id, int basePrice, String name) {
+    public Item(Long id, int basePrice, String name) {
         this.id = id;
         this.basePrice = basePrice;
         this.name = name;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

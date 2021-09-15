@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Group {
 
-    private int id;
+    private Long id;
     private String name;
     private Group parentGroup;
     private List<Group> subGroups = new ArrayList<>();
@@ -14,29 +14,29 @@ public class Group {
     public Group() {
     }
 
-    public Group(int id, String name) {
+    public Group(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Group(int id, String name, Group parentGroup) {
+    public Group(Long id, String name, Group parentGroup) {
         this.id = id;
         this.name = name;
         this.parentGroup = parentGroup;
     }
 
-    public Group(int id, String name, List<Group> subGroups, List<Item> items) {
+    public Group(Long id, String name, List<Group> subGroups, List<Item> items) {
         this.id = id;
         this.name = name;
         this.subGroups = subGroups;
         this.items = items;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -71,28 +71,6 @@ public class Group {
     public void setItems(List<Item> items) {
         this.items = items;
     }
-
-//    public void print(int level) {
-//        System.out.printf("GROUP - id: {%d} {%s}%n", id, name);
-//        printSubGroups(++level);
-//        printItems(level);
-//    }
-//
-//    private void printSubGroups(int level) {
-//        String subLevelPrefix = "  ".repeat(level);
-//        for (Group group : subGroups) {
-//            System.out.print(subLevelPrefix);
-//            group.print(level);
-//        }
-//    }
-//
-//    private void printItems(int level) {
-//        String subLevelPrefix = "  ".repeat(level);
-//        for (Item item : items) {
-//            System.out.print(subLevelPrefix);
-//            item.print();
-//        }
-//    }
 
 }
 

@@ -1,36 +1,53 @@
 package com.aca_disqo.generactive.controller.dto;
 
+import com.aca_disqo.generactive.controller.enums.ItemClientType;
 import com.aca_disqo.generactive.utils.Resolution;
 
 public class ItemDTO {
 
-    private int id;
+    private Long id;
     private int price;
     private String name;
     private String currency;
-    private int groupId;
-    private int itemType;
+    private Long groupId;
     private double finalPrice;
     private Resolution resolution;
     private String imageUrl;
+    private ItemClientType itemClientType;
 
     public ItemDTO() {
     }
 
-    public ItemDTO(int id, int price, String currency, int groupId, int itemType) {
+    public ItemDTO(Long id, int price, String currency, Long groupId,ItemClientType itemClientType) {
         this.id = id;
         this.price = price;
         this.currency = currency;
         this.groupId = groupId;
-        this.itemType = itemType;
+        this.itemClientType = itemClientType;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
+
+    public ItemClientType getItemClientType() {
+        return itemClientType;
+    }
+
+    public void setItemClientType(ItemClientType itemClientType) {
+        this.itemClientType = itemClientType;
     }
 
     public int getPrice() {
@@ -57,22 +74,6 @@ public class ItemDTO {
         this.currency = currency;
     }
 
-    public int getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(int groupId) {
-        this.groupId = groupId;
-    }
-
-    public int getItemType() {
-        return itemType;
-    }
-
-    public void setItemType(int itemType) {
-        this.itemType = itemType;
-    }
-
     public double getFinalPrice() {
         return finalPrice;
     }
@@ -95,5 +96,20 @@ public class ItemDTO {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    @Override
+    public String toString() {
+        return "ItemDTO{" +
+                "id=" + id +
+                ", price=" + price +
+                ", name='" + name + '\'' +
+                ", currency='" + currency + '\'' +
+                ", groupId=" + groupId +
+                ", finalPrice=" + finalPrice +
+                ", resolution=" + resolution +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", itemClientType=" + itemClientType +
+                '}';
     }
 }

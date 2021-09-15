@@ -9,17 +9,17 @@ import com.aca_disqo.generactive.repository.model.Item;
 import com.aca_disqo.generactive.service.ItemService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
 
-@WebServlet(name = "itemsServlet", value = "/items-servlet/*")
+@WebServlet(name = "itemsServlet", value = "/items/*")
 public class ItemController extends HttpServlet {
 
     private final ItemService itemService = ApplicationContext.getInstance().getItemService();
@@ -36,7 +36,7 @@ public class ItemController extends HttpServlet {
             resp.getWriter().write("Missing param " + id);
             return;
         }
-        final Item item = this.itemService.findItemBYId(Integer.parseInt(id));
+        final Item item = this.itemService.findItemBYId(Long.parseLong(id));
         resp.getWriter().write(objectMapper.writeValueAsString(itemConverter.convert(item)));
     }
 
@@ -59,31 +59,16 @@ public class ItemController extends HttpServlet {
             resp.getWriter().write(objectMapper.writeValueAsString(errorEntity));
         }
     }
-//
-//    @Override
-//    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-//        resp.setContentType("application/json");
-//        resp.getWriter().write(objectMapper.writeValueAsString(itemConverter.bulkConvert(itemService.findALl())));
-//    }
-
-
-//    @Override
-//    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-//        int priceFrom = Integer.parseInt(req.getParameter("priceFrom"));
-//        int priceTo = Integer.parseInt(req.getParameter("priceTo"));
-//        resp.setContentType("application/json");
-//        resp.getWriter().write(objectMapper.writeValueAsString(itemConverter.bulkConvert(itemService.findItemsByPriceRange(priceFrom, priceTo))));
-//    }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse res) {
         String id = req.getParameter("id");
-        this.itemService.deleteById(Integer.parseInt(id));
+        this.itemService.deleteById(Long.parseLong(id));
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        int id = Integer.parseInt(req.getParameter("id"));
+        Long id = Long.parseLong(req.getParameter("id"));
         if (!req.getContentType().equals(HttpConstants.ContentType.APPLICATION_JSON)) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "not_supported_format");
         }

@@ -9,17 +9,17 @@ public interface ItemService {
 
     List<Item> findALl();
 
-    Item findItemBYId(int id);
+    Item findItemBYId(Long id);
 
     Item create(ItemDTO itemDto);
 
-    Item update(int id, ItemDTO itemDTO);
+    Item update(Long id, ItemDTO itemDTO);
 
-    void deleteById(int id);
+    void deleteById(Long id);
 
     List<Item> findItemsByPriceRange(int priceFrom, int priceTo);
 
-    List<Item> findItemByGroup(int parentGroupId);
+    List<Item> findItemByGroup(Long parentGroupId);
 
     Item findHighestPricedItem();
 

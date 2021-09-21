@@ -14,6 +14,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.stream.Collectors;
@@ -29,7 +30,8 @@ public class GroupController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        Long id = Long.parseLong(req.getParameter("id"));
+        String idS = req.getParameter("id");
+        Long id = Long.parseLong(idS);
         resp.getWriter().write(objectMapper.writeValueAsString(converter.convert(this.groupService.get(id))));
     }
 

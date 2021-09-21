@@ -15,6 +15,11 @@ public abstract class Item {
     public Item() {
     }
 
+    public Item(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Item(Long id, int basePrice, String name) {
         this.id = id;
         this.basePrice = basePrice;

@@ -7,6 +7,10 @@ public class Stock extends Item {
     public Stock() {
     }
 
+    public Stock(Long id, String name) {
+        super(id, name);
+    }
+
     public Stock(Long id, int basePrice, String name) {
         super(id, basePrice, name);
     }

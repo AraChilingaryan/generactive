@@ -26,7 +26,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
 
-    public static ItemService getInstance(){
+    public static ItemService getInstance() {
         if (itemService == null) {
             itemService = new ItemServiceImpl(ApplicationContext.getInstance().getGroupService(),
                     ApplicationContext.getInstance().getItemRepository());
@@ -71,7 +71,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> findItemsByPriceRange(int priceFrom, int priceTo) {
-       return this.itemRepository.findItemsByPriceRange(priceFrom, priceTo);
+        return this.itemRepository.findItemsByPriceRange(priceFrom, priceTo);
     }
 
     @Override

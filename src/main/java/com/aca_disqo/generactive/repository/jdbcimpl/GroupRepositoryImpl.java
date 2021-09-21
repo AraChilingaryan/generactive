@@ -52,7 +52,7 @@ public class GroupRepositoryImpl implements GroupRepository {
     public Optional<Group> get(Long id) {
         Group group = null;
         try (Connection connection = DatabaseConnection.initializeConnection()) {
-            String query = "SELECT g.id as group_id, g.name as group_name, i.id, i.name, i.base_price FROM \"groups\" g left join item i on g.id = i.group_id where g.id = ?";
+            String query = "SELECT g.id as group_id, g.name as group_name, i.id, i.name, i.base_price FROM generactive.groups g left join generactive.item i on g.id = i.group_id where g.id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();

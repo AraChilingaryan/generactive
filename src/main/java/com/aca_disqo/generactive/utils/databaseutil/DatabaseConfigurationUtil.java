@@ -1,4 +1,4 @@
-package com.aca_disqo.generactive.utils;
+package com.aca_disqo.generactive.utils.databaseutil;
 
 import java.io.IOException;
 import java.util.Objects;

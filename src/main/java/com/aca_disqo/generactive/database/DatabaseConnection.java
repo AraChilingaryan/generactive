@@ -1,7 +1,7 @@
 package com.aca_disqo.generactive.database;
 
 
-import com.aca_disqo.generactive.utils.DatabaseConfigurationUtil;
+import com.aca_disqo.generactive.utils.databaseutil.DatabaseConfigurationUtil;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -9,13 +9,15 @@ public interface ItemRepository {
 
     List<Item> getAll();
 
-    Item getItemById(int id);
+    Item getItemById(Long id);
 
     Item create(Item item);
 
-    void deleteById(int id);
+    void deleteById(Long id);
 
     List<Item> findItemByGroup(Group parentGroup);
 
     Item findHighestPricedItem();
+
+    List<Item> findItemsByPriceRange(int from, int to);
 }

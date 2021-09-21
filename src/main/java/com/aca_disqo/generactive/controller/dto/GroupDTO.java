@@ -6,41 +6,41 @@ import java.util.List;
 
 public class GroupDTO {
 
-    private int id;
-    private int parentId;
+    private Long id;
+    private Long parentId;
     private String name;
-    private List<Integer> subGroups;
-    private List<Integer> items;
+    private List<Long> subGroups;
+    private List<Long> items;
     private Resolution resolution;
 
 
     public GroupDTO() {
     }
 
-    public GroupDTO(int id, String name) {
+    public GroupDTO(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public GroupDTO(int id, int parentId, String name) {
+    public GroupDTO(Long id, Long parentId, String name) {
         this.id = id;
         this.parentId = parentId;
         this.name = name;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getParentId() {
+    public Long getParentId() {
         return parentId;
     }
 
-    public void setParentId(int parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 
@@ -52,19 +52,19 @@ public class GroupDTO {
         this.name = name;
     }
 
-    public List<Integer> getSubGroups() {
+    public List<Long> getSubGroups() {
         return subGroups;
     }
 
-    public void setSubGroups(List<Integer> subGroups) {
+    public void setSubGroups(List<Long> subGroups) {
         this.subGroups = subGroups;
     }
 
-    public List<Integer> getItems() {
+    public List<Long> getItems() {
         return items;
     }
 
-    public void setItems(List<Integer> items) {
+    public void setItems(List<Long> items) {
         this.items = items;
     }
 

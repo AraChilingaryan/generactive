@@ -10,13 +10,13 @@ public interface GroupService {
 
     Group create(GroupDTO groupDTO);
 
-    Group get(int id);
+    Group get(Long id);
 
-    Group update(int id, GroupDTO groupDTO);
+    Group update(Long id, GroupDTO groupDTO);
 
     List<Group> getAll();
 
-    void deleteById(int id);
+    void deleteById(Long id);
 
     Group findGroupByName(String name);
 

@@ -2,6 +2,7 @@ package com.aca_disqo.generactive.service.impl;
 
 import com.aca_disqo.generactive.context.ApplicationContext;
 import com.aca_disqo.generactive.controller.dto.ItemDTO;
+import com.aca_disqo.generactive.controller.enums.ItemClientType;
 import com.aca_disqo.generactive.repository.ItemRepository;
 import com.aca_disqo.generactive.repository.model.Generative;
 import com.aca_disqo.generactive.repository.model.Group;
@@ -12,7 +13,6 @@ import com.aca_disqo.generactive.service.ItemService;
 import com.aca_disqo.generactive.utils.Currency;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ItemServiceImpl implements ItemService {
 
@@ -26,7 +26,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
 
-    public static ItemService getInstance(){
+    public static ItemService getInstance() {
         if (itemService == null) {
             itemService = new ItemServiceImpl(ApplicationContext.getInstance().getGroupService(),
                     ApplicationContext.getInstance().getItemRepository());
@@ -40,7 +40,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item findItemBYId(int id) {
+    public Item findItemBYId(Long id) {
         return this.itemRepository.getItemById(id);
     }
 
@@ -54,7 +54,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item update(int id, ItemDTO itemDTO) {
+    public Item update(Long id, ItemDTO itemDTO) {
         final Item item = this.itemRepository.getItemById(id);
         item.setBasePrice(itemDTO.getPrice());
         item.setCurrency(convertCurrency(itemDTO.getCurrency()));
@@ -65,19 +65,17 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Long id) {
         itemRepository.deleteById(id);
     }
 
     @Override
     public List<Item> findItemsByPriceRange(int priceFrom, int priceTo) {
-        return itemRepository.getAll().stream()
-                .filter(item -> item.getBasePrice() >= priceFrom || item.getBasePrice() <= priceTo)
-                .collect(Collectors.toList());
+        return this.itemRepository.findItemsByPriceRange(priceFrom, priceTo);
     }
 
     @Override
-    public List<Item> findItemByGroup(int parentGroupId) {
+    public List<Item> findItemByGroup(Long parentGroupId) {
         return itemRepository.findItemByGroup(groupService.get(parentGroupId));
     }
 
@@ -89,9 +87,9 @@ public class ItemServiceImpl implements ItemService {
 
     private Item buildItemFrom(ItemDTO itemDTO) {
         Item item = null;
-        if (itemDTO.getItemType() == 1) {
+        if (itemDTO.getItemClientType().equals(ItemClientType.GENERATIVE)) {
             item = new Generative();
-        } else if (itemDTO.getItemType() == 2) {
+        } else if (itemDTO.getItemClientType().equals(ItemClientType.STOCK)) {
             item = new Stock();
         }
         assert item != null;

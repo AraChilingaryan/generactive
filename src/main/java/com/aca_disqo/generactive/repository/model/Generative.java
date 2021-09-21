@@ -8,7 +8,7 @@ public class Generative extends Item {
     public Generative() {
     }
 
-    public Generative(int id, int basePrice, String name) {
+    public Generative(Long id, int basePrice, String name) {
         super(id, basePrice, name);
     }
 

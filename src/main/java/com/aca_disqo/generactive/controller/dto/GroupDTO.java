@@ -1,16 +1,18 @@
 package com.aca_disqo.generactive.controller.dto;
 
 import com.aca_disqo.generactive.utils.Resolution;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class GroupDTO {
 
     private Long id;
     private Long parentId;
     private String name;
-    private List<Long> subGroups;
-    private List<Long> items;
+    private List<GroupDTO> subGroups;
+    private List<ItemDTO> items;
     private Resolution resolution;
 
 
@@ -52,19 +54,19 @@ public class GroupDTO {
         this.name = name;
     }
 
-    public List<Long> getSubGroups() {
+    public List<GroupDTO> getSubGroups() {
         return subGroups;
     }
 
-    public void setSubGroups(List<Long> subGroups) {
+    public void setSubGroups(List<GroupDTO> subGroups) {
         this.subGroups = subGroups;
     }
 
-    public List<Long> getItems() {
+    public List<ItemDTO> getItems() {
         return items;
     }
 
-    public void setItems(List<Long> items) {
+    public void setItems(List<ItemDTO> items) {
         this.items = items;
     }
 

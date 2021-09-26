@@ -2,7 +2,6 @@ package com.aca_disqo.generactive.converter.impl;
 
 
 import com.aca_disqo.generactive.controller.dto.ItemDTO;
-import com.aca_disqo.generactive.controller.enums.ItemClientType;
 import com.aca_disqo.generactive.converter.ItemConverter;
 import com.aca_disqo.generactive.repository.model.Item;
 
@@ -33,8 +32,8 @@ public class ItemConverterImpl implements ItemConverter {
     public ItemDTO convert(final Item item) {
         final ItemDTO itemDTO = new ItemDTO();
         itemDTO.setId(item.getId());
+        itemDTO.setPrice(item.getBasePrice());
         itemDTO.setGroupId(item.getGroup().getId());
-        itemDTO.setCurrency(item.getCurrency().name());
         return itemDTO;
     }
 
@@ -46,8 +45,6 @@ public class ItemConverterImpl implements ItemConverter {
         itemDTO.setName(csvLine[2]);
         itemDTO.setImageUrl(csvLine[3]);
         itemDTO.setGroupId(Long.parseLong(csvLine[4]));
-        itemDTO.setCurrency("AMD");
-        itemDTO.setItemClientType(ItemClientType.STOCK);
         return itemDTO;
     }
 }

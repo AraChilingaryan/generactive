@@ -7,6 +7,7 @@ import com.aca_disqo.generactive.controller.utils.HttpConstants;
 import com.aca_disqo.generactive.converter.ItemConverter;
 import com.aca_disqo.generactive.repository.model.Item;
 import com.aca_disqo.generactive.service.ItemService;
+import com.aca_disqo.generactive.utils.URLUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.ServletException;
@@ -19,7 +20,7 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 
 
-@WebServlet(name = "itemsServlet", value = "/items/*")
+@WebServlet(name = "ItemServlet", urlPatterns = "/items/*")
 public class ItemController extends HttpServlet {
 
     private final ItemService itemService = ApplicationContext.getInstance().getItemService();
@@ -29,14 +30,14 @@ public class ItemController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String id = req.getParameter("id");
+        Long id = URLUtils.getLastPathSegment(req, resp);
 
-        if (id == null || id.isEmpty()) {
+        if (id == null) {
             resp.setStatus(400);
             resp.getWriter().write("Missing param " + id);
             return;
         }
-        final Item item = this.itemService.findItemBYId(Long.parseLong(id));
+        final Item item = this.itemService.findItemBYId(id);
         resp.getWriter().write(objectMapper.writeValueAsString(itemConverter.convert(item)));
     }
 
@@ -61,14 +62,18 @@ public class ItemController extends HttpServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse res) {
-        String id = req.getParameter("id");
-        this.itemService.deleteById(Long.parseLong(id));
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        Long id = URLUtils.getLastPathSegment(req, resp);
+        if (!req.getContentType().equals(HttpConstants.ContentType.APPLICATION_JSON)) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "not_supported_format");
+        }
+
+        this.itemService.deleteById(id);
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Long id = Long.parseLong(req.getParameter("id"));
+        Long id = URLUtils.getLastPathSegment(req, resp);
         if (!req.getContentType().equals(HttpConstants.ContentType.APPLICATION_JSON)) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "not_supported_format");
         }

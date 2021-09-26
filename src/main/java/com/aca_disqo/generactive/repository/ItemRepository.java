@@ -1,5 +1,6 @@
 package com.aca_disqo.generactive.repository;
 
+import com.aca_disqo.generactive.controller.dto.ItemDTO;
 import com.aca_disqo.generactive.repository.model.Group;
 import com.aca_disqo.generactive.repository.model.Item;
 
@@ -11,13 +12,15 @@ public interface ItemRepository {
 
     Item getItemById(Long id);
 
-    Item create(Item item);
+    Item save(Item item);
 
-    void deleteById(Long id);
+    boolean deleteById(Long id);
 
     List<Item> findItemByGroup(Group parentGroup);
 
     Item findHighestPricedItem();
 
     List<Item> findItemsByPriceRange(int from, int to);
+
+    Item update(Long id, Item item);
 }

@@ -7,6 +7,7 @@ import com.aca_disqo.generactive.controller.utils.HttpConstants;
 import com.aca_disqo.generactive.converter.GroupConverter;
 import com.aca_disqo.generactive.repository.model.Group;
 import com.aca_disqo.generactive.service.GroupService;
+import com.aca_disqo.generactive.utils.URLUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.ServletException;
@@ -30,9 +31,8 @@ public class GroupController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        String idS = req.getParameter("id");
-        Long id = Long.parseLong(idS);
-        resp.getWriter().write(objectMapper.writeValueAsString(converter.convert(this.groupService.get(id))));
+        Long groupId = URLUtils.getLastPathSegment(req, resp);
+        resp.getWriter().write(objectMapper.writeValueAsString(converter.convert(this.groupService.get(groupId))));
     }
 
     @Override
@@ -57,14 +57,14 @@ public class GroupController extends HttpServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse res) {
-        Long id = Long.parseLong(req.getParameter("id"));
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        Long id = URLUtils.getLastPathSegment(req, resp);
         this.groupService.deleteById(id);
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Long id = Long.parseLong(req.getParameter("id"));
+        Long id = URLUtils.getLastPathSegment(req, resp);
         final ObjectMapper objectMapper = new ObjectMapper();
         if (!req.getContentType().equals(HttpConstants.ContentType.APPLICATION_JSON)) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "not_supported_format");

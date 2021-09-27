@@ -122,6 +122,15 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public Item update(Long id, Item item) {
-        return null;
+        Session session = HIBERNATE_CONFIGURATION.getSession();
+        Transaction transaction = session.beginTransaction();
+        Item existingItem = session.get(Item.class, id);
+        existingItem.setGroup(item.getGroup());
+        existingItem.setBasePrice(item.getBasePrice());
+        existingItem.setName(item.getName());
+
+        transaction.commit();
+        session.close();
+        return item;
     }
 }

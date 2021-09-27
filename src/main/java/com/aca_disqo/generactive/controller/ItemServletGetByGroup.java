@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet(name = "itemsServlet", value = "/items-servlet/getByGroup")
+@WebServlet(name = "itemsServletForGroup", urlPatterns = "/items-servlet/getByGroup")
 public class ItemServletGetByGroup extends HttpServlet {
     private final ItemService itemService = ApplicationContext.getInstance().getItemService();
     private final ObjectMapper objectMapper = new ObjectMapper();

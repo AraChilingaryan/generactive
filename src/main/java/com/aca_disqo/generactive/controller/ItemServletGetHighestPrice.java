@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet(name = "itemsServlet", value = "/items-servlet/getHighestPrice")
+@WebServlet(name = "itemsServletHighestPrice", value = "/items-servlet/getHighestPrice")
 public class ItemServletGetHighestPrice extends HttpServlet {
     private final ItemService itemService = ApplicationContext.getInstance().getItemService();
     private final ObjectMapper objectMapper = new ObjectMapper();

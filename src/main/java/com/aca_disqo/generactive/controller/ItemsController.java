@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "itemsServlet", value = "/items-servlet/search")
+@WebServlet(name = "itemsServlet", urlPatterns = "/items-servlet/search")
 public class ItemsController extends HttpServlet {
 
     private final ItemService itemService = ApplicationContext.getInstance().getItemService();

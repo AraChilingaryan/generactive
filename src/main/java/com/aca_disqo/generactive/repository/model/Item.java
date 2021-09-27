@@ -1,6 +1,5 @@
 package com.aca_disqo.generactive.repository.model;
 
-import com.aca_disqo.generactive.config.Configuration;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
@@ -67,11 +66,6 @@ public class Item {
 
     public Group getGroup() {
         return group;
-    }
-
-    public int calculatePrice(Configuration configuration) {
-        // FIXME
-        return basePrice;
     }
 
     public void setId(Long id) {

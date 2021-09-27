@@ -1,28 +1,23 @@
 package com.aca_disqo.generactive.service.impl;
 
-import com.aca_disqo.generactive.context.ApplicationContext;
 import com.aca_disqo.generactive.controller.dto.GroupDTO;
 import com.aca_disqo.generactive.repository.GroupRepository;
 import com.aca_disqo.generactive.repository.model.Group;
 import com.aca_disqo.generactive.service.GroupService;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class GroupServiceImpl implements GroupService {
 
-    private static GroupService groupService = null;
     private final GroupRepository groupRepository;
 
-    private GroupServiceImpl(GroupRepository groupRepository) {
+    public GroupServiceImpl(GroupRepository groupRepository) {
         this.groupRepository = groupRepository;
     }
 
-    public static GroupService getInstance() {
-        if (groupService == null) {
-            groupService = new GroupServiceImpl(ApplicationContext.getInstance().getGroupRepository());
-        }
-        return groupService;
-    }
 
     @Override
     public Group create(GroupDTO groupDTO) {

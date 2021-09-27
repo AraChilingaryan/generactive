@@ -3,32 +3,27 @@ package com.aca_disqo.generactive.repository.hibernateImpl;
 import com.aca_disqo.generactive.repository.ItemRepository;
 import com.aca_disqo.generactive.repository.model.Group;
 import com.aca_disqo.generactive.repository.model.Item;
-import com.aca_disqo.generactive.utils.databaseutil.HibernateConfiguration;
+import com.aca_disqo.generactive.config.HibernateConfiguration;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.Query;
 import java.util.List;
 
+@Component
 public class ItemRepositoryImpl implements ItemRepository {
-    private static ItemRepository itemRepository = null;
 
-    private ItemRepositoryImpl() {
+    private final SessionFactory sessionFactory;
+
+    public ItemRepositoryImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
-
-    public static ItemRepository getInstance() {
-        if (itemRepository == null) {
-            itemRepository = new ItemRepositoryImpl();
-        }
-        return itemRepository;
-    }
-
-    public static final HibernateConfiguration HIBERNATE_CONFIGURATION =
-            HibernateConfiguration.getInstance();
 
     @Override
     public List<Item> getAll() {
-        Session session = HIBERNATE_CONFIGURATION.getSession();
+        Session session = sessionFactory.getCurrentSession();
         Transaction transaction = session.beginTransaction();
         List<Item> items = session.createQuery("SELECT a FROM Item a", Item.class).getResultList();
 
@@ -39,7 +34,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public Item getItemById(Long id) {
-        Session session = HIBERNATE_CONFIGURATION.getSession();
+        Session session = sessionFactory.getCurrentSession();
         Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("FROM Item i WHERE i.id = :id");
         query.setParameter("id", id);
@@ -53,7 +48,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public Item save(Item item) {
-        Session session = HIBERNATE_CONFIGURATION.getSession();
+        Session session = sessionFactory.getCurrentSession();
         Transaction transaction = session.beginTransaction();
         session.save(item);
 
@@ -64,7 +59,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public boolean deleteById(Long id) {
-        Session session = HIBERNATE_CONFIGURATION.getSession();
+        Session session = sessionFactory.getCurrentSession();
         Transaction transaction = session.beginTransaction();
         String q = "delete from Item i" +
                 " where i.id = :id";
@@ -80,7 +75,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public List<Item> findItemByGroup(Group parentGroup) {
-        Session session = HIBERNATE_CONFIGURATION.getSession();
+        Session session = sessionFactory.getCurrentSession();
         Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("FROM Item i WHERE i.group = :group");
         query.setParameter("group", parentGroup);
@@ -94,7 +89,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public Item findHighestPricedItem() {
-        Session session = HIBERNATE_CONFIGURATION.getSession();
+        Session session = sessionFactory.getCurrentSession();
         Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("FROM Item i WHERE i.basePrice = (select max(ii.basePrice) from Item ii)");
 
@@ -107,7 +102,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public List<Item> findItemsByPriceRange(int from, int to) {
-        Session session = HIBERNATE_CONFIGURATION.getSession();
+        Session session = sessionFactory.getCurrentSession();
         Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("FROM Item i WHERE i.basePrice > :from AND i.basePrice < :to");
         query.setParameter("from", from);
@@ -122,7 +117,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public Item update(Long id, Item item) {
-        Session session = HIBERNATE_CONFIGURATION.getSession();
+        Session session = sessionFactory.getCurrentSession();
         Transaction transaction = session.beginTransaction();
         Item existingItem = session.get(Item.class, id);
         existingItem.setGroup(item.getGroup());

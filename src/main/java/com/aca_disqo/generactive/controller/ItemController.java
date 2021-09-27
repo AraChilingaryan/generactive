@@ -1,20 +1,22 @@
 package com.aca_disqo.generactive.controller;
 
-import com.aca_disqo.generactive.context.ApplicationContext;
+import com.aca_disqo.generactive.config.ApplicationContainer;
 import com.aca_disqo.generactive.controller.dto.ItemDTO;
 import com.aca_disqo.generactive.controller.utils.ErrorEntity;
 import com.aca_disqo.generactive.controller.utils.HttpConstants;
 import com.aca_disqo.generactive.converter.ItemConverter;
+import com.aca_disqo.generactive.converter.impl.ItemConverterImpl;
 import com.aca_disqo.generactive.repository.model.Item;
 import com.aca_disqo.generactive.service.ItemService;
+import com.aca_disqo.generactive.service.impl.ItemServiceImpl;
 import com.aca_disqo.generactive.utils.URLUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.stream.Collectors;
@@ -23,9 +25,10 @@ import java.util.stream.Collectors;
 @WebServlet(name = "ItemServlet", urlPatterns = "/items/*")
 public class ItemController extends HttpServlet {
 
-    private final ItemService itemService = ApplicationContext.getInstance().getItemService();
-    private final ObjectMapper objectMapper = new ObjectMapper();
-    private ItemConverter itemConverter = ApplicationContext.getInstance().getItemConverter();
+    private final ItemService itemService =ApplicationContainer.applicationContext
+            .getBean(ItemServiceImpl.class);
+    private final ItemConverter itemConverter = ApplicationContainer.applicationContext
+            .getBean(ItemConverterImpl.class);
 
 
     @Override
@@ -37,6 +40,7 @@ public class ItemController extends HttpServlet {
             resp.getWriter().write("Missing param " + id);
             return;
         }
+        final ObjectMapper objectMapper = new ObjectMapper();
         final Item item = this.itemService.findItemBYId(id);
         resp.getWriter().write(objectMapper.writeValueAsString(itemConverter.convert(item)));
     }
@@ -47,6 +51,7 @@ public class ItemController extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "not_supported_format");
         }
 
+        final ObjectMapper objectMapper = new ObjectMapper();
         BufferedReader bufferedReader = req.getReader();
         String body = bufferedReader.lines().collect(Collectors.joining());
 
@@ -78,6 +83,7 @@ public class ItemController extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "not_supported_format");
         }
 
+        final ObjectMapper objectMapper = new ObjectMapper();
         BufferedReader bufferedReader = req.getReader();
         String body = bufferedReader.lines().collect(Collectors.joining());
 

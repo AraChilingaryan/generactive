@@ -1,12 +1,14 @@
 package com.aca_disqo.generactive.controller;
 
-import com.aca_disqo.generactive.context.ApplicationContext;
+import com.aca_disqo.generactive.config.ApplicationContainer;
 import com.aca_disqo.generactive.controller.dto.GroupDTO;
 import com.aca_disqo.generactive.controller.utils.ErrorEntity;
 import com.aca_disqo.generactive.controller.utils.HttpConstants;
 import com.aca_disqo.generactive.converter.GroupConverter;
+import com.aca_disqo.generactive.converter.impl.GroupConverterImpl;
 import com.aca_disqo.generactive.repository.model.Group;
 import com.aca_disqo.generactive.service.GroupService;
+import com.aca_disqo.generactive.service.impl.GroupServiceImpl;
 import com.aca_disqo.generactive.utils.URLUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -24,8 +26,8 @@ import java.util.stream.Collectors;
 @WebServlet(name = "GroupServlet", urlPatterns = "/groups/*")
 public class GroupController extends HttpServlet {
 
-    private final GroupService groupService = ApplicationContext.getInstance().getGroupService();
-    private final GroupConverter converter = ApplicationContext.getInstance().getGroupConverter();
+    private final GroupService groupService = ApplicationContainer.applicationContext.getBean(GroupServiceImpl.class);
+    private final GroupConverter converter = ApplicationContainer.applicationContext.getBean(GroupConverterImpl.class);
 
 
     @Override

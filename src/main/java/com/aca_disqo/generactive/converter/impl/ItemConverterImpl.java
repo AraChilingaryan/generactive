@@ -1,26 +1,18 @@
 package com.aca_disqo.generactive.converter.impl;
 
-
 import com.aca_disqo.generactive.controller.dto.ItemDTO;
 import com.aca_disqo.generactive.converter.ItemConverter;
 import com.aca_disqo.generactive.repository.model.Item;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class ItemConverterImpl implements ItemConverter {
 
-    private static ItemConverter itemConverter;
+    public ItemConverterImpl() {
 
-    private ItemConverterImpl() {
-
-    }
-
-    public static ItemConverter getInstance() {
-        if (itemConverter == null) {
-            itemConverter = new ItemConverterImpl();
-        }
-        return itemConverter;
     }
 
     @Override

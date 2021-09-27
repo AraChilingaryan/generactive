@@ -1,6 +1,5 @@
 package com.aca_disqo.generactive.service.impl;
 
-import com.aca_disqo.generactive.context.ApplicationContext;
 import com.aca_disqo.generactive.controller.dto.ItemDTO;
 import com.aca_disqo.generactive.repository.ItemRepository;
 import com.aca_disqo.generactive.repository.model.Group;
@@ -8,27 +7,21 @@ import com.aca_disqo.generactive.repository.model.Item;
 import com.aca_disqo.generactive.service.GroupService;
 import com.aca_disqo.generactive.service.ItemService;
 import com.aca_disqo.generactive.utils.Currency;
+import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ItemServiceImpl implements ItemService {
 
     private final GroupService groupService;
     private final ItemRepository itemRepository;
-    private static ItemService itemService;
 
-    private ItemServiceImpl(GroupService groupService1, ItemRepository itemRepository) {
+    public ItemServiceImpl(GroupService groupService1,
+                           ItemRepository itemRepository) {
         this.groupService = groupService1;
         this.itemRepository = itemRepository;
-    }
-
-
-    public static ItemService getInstance() {
-        if (itemService == null) {
-            itemService = new ItemServiceImpl(ApplicationContext.getInstance().getGroupService(),
-                    ApplicationContext.getInstance().getItemRepository());
-        }
-        return itemService;
     }
 
     @Override

@@ -2,34 +2,27 @@ package com.aca_disqo.generactive.repository.hibernateImpl;
 
 import com.aca_disqo.generactive.repository.GroupRepository;
 import com.aca_disqo.generactive.repository.model.Group;
-import com.aca_disqo.generactive.utils.databaseutil.HibernateConfiguration;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
+@Component
 public class GroupRepositoryImpl implements GroupRepository {
 
-    private static GroupRepository groupRepository = null;
+    private final SessionFactory sessionFactory;
 
-    private GroupRepositoryImpl() {
+    public GroupRepositoryImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
-
-    public static GroupRepository getInstance() {
-        if (groupRepository == null) {
-            return new GroupRepositoryImpl();
-        }
-        return groupRepository;
-    }
-
-    public static final HibernateConfiguration HIBERNATE_CONFIGURATION =
-            HibernateConfiguration.getInstance();
 
 
     @Override
     public Optional<Group> create(Group group) {
-        Session session = HIBERNATE_CONFIGURATION.getSession();
+        Session session = sessionFactory.getCurrentSession();
         Transaction transaction = session.beginTransaction();
         session.save(group);
 
@@ -41,7 +34,7 @@ public class GroupRepositoryImpl implements GroupRepository {
     }
 
     public Optional<Group> get(Long groupId) {
-        Session session = HIBERNATE_CONFIGURATION.getSession();
+        Session session = sessionFactory.getCurrentSession();
         Transaction transaction = session.beginTransaction();
         Group group = session.get(Group.class, groupId);
 

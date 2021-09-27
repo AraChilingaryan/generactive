@@ -1,36 +1,47 @@
 package com.aca_disqo.generactive.repository.model;
 
 import com.aca_disqo.generactive.config.Configuration;
-import com.aca_disqo.generactive.utils.Currency;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
-public abstract class Item {
+import javax.persistence.*;
 
+@Entity
+@Table(name = "item")
+public class Item {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "item_id_seq")
+    @SequenceGenerator(name = "item_id_seq", sequenceName = "item_id_seq", allocationSize = 1)
     private Long id;
+
+    @Column(name = "base_price")
     private int basePrice;
+
+    @Column(name = "name")
     private String name;
+
+    @Transient
     private String imageUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    @JsonBackReference
     private Group group;
-    private Currency currency;
 
     public Item() {
     }
 
-    public Item(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public Item(Long id, int basePrice, String name) {
+    public Item(long id, int basePrice, String name) {
         this.id = id;
         this.basePrice = basePrice;
         this.name = name;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -50,34 +61,28 @@ public abstract class Item {
         this.name = name;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setGroup(Group group) {
+        this.group = group;
     }
 
     public Group getGroup() {
         return group;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
+    public int calculatePrice(Configuration configuration) {
+        // FIXME
+        return basePrice;
     }
 
-    public Currency getCurrency() {
-        return currency;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public abstract double calculatePrice(Configuration configuration);
-
-    public void print() {
-        System.out.printf("ITEM(%s) - id: {%d} {%s} {%d}%n",
-                this.getClass().getSimpleName(), id, name, basePrice);
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

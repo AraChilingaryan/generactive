@@ -1,29 +1,23 @@
 package com.aca_disqo.generactive.controller.dto;
 
-import com.aca_disqo.generactive.controller.enums.ItemClientType;
-import com.aca_disqo.generactive.utils.Resolution;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ItemDTO {
 
     private Long id;
     private int price;
     private String name;
-    private String currency;
     private Long groupId;
-    private double finalPrice;
-    private Resolution resolution;
     private String imageUrl;
-    private ItemClientType itemClientType;
 
     public ItemDTO() {
     }
 
-    public ItemDTO(Long id, int price, String currency, Long groupId,ItemClientType itemClientType) {
+    public ItemDTO(Long id, int price, Long groupId) {
         this.id = id;
         this.price = price;
-        this.currency = currency;
         this.groupId = groupId;
-        this.itemClientType = itemClientType;
     }
 
     public Long getId() {
@@ -42,14 +36,6 @@ public class ItemDTO {
         this.groupId = groupId;
     }
 
-    public ItemClientType getItemClientType() {
-        return itemClientType;
-    }
-
-    public void setItemClientType(ItemClientType itemClientType) {
-        this.itemClientType = itemClientType;
-    }
-
     public int getPrice() {
         return price;
     }
@@ -66,30 +52,6 @@ public class ItemDTO {
         this.name = name;
     }
 
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public double getFinalPrice() {
-        return finalPrice;
-    }
-
-    public void setFinalPrice(double finalPrice) {
-        this.finalPrice = finalPrice;
-    }
-
-    public Resolution getResolution() {
-        return resolution;
-    }
-
-    public void setResolution(Resolution resolution) {
-        this.resolution = resolution;
-    }
-
     public String getImageUrl() {
         return imageUrl;
     }
@@ -104,12 +66,8 @@ public class ItemDTO {
                 "id=" + id +
                 ", price=" + price +
                 ", name='" + name + '\'' +
-                ", currency='" + currency + '\'' +
                 ", groupId=" + groupId +
-                ", finalPrice=" + finalPrice +
-                ", resolution=" + resolution +
                 ", imageUrl='" + imageUrl + '\'' +
-                ", itemClientType=" + itemClientType +
                 '}';
     }
 }

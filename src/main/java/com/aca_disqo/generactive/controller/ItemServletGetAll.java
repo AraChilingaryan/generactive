@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet(name = "itemsServlet", value = "/items-servlet/getAll")
+@WebServlet(name = "itemsServletGetAll", urlPatterns = "/items-servlet/getAll")
 public class ItemServletGetAll extends HttpServlet {
     private final ItemService itemService = ApplicationContext.getInstance().getItemService();
     private final ObjectMapper objectMapper = new ObjectMapper();

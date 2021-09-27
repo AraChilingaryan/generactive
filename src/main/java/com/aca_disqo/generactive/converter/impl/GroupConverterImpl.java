@@ -1,12 +1,11 @@
 package com.aca_disqo.generactive.converter.impl;
 
-
 import com.aca_disqo.generactive.controller.dto.GroupDTO;
 import com.aca_disqo.generactive.converter.GroupConverter;
 import com.aca_disqo.generactive.converter.ItemConverter;
 import com.aca_disqo.generactive.repository.model.Group;
-import com.aca_disqo.generactive.repository.model.Item;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class GroupConverterImpl implements GroupConverter {
@@ -33,12 +32,22 @@ public class GroupConverterImpl implements GroupConverter {
         if (group.getParentGroup() != null) {
             groupDTO.setParentId(group.getParentGroup().getId());
         }
-        if (group.getSubGroups() != null) {
-            groupDTO.setSubGroups(group.getSubGroups().stream().map(Group::getId).collect(Collectors.toList()));
+        if(group.getSubGroups() != null){
+            groupDTO.setSubGroups(this.convert(group.getSubGroups()));
         }
         if (group.getItems() != null) {
-            groupDTO.setItems(group.getItems().stream().map(Item::getId).collect(Collectors.toList()));
+            groupDTO.setItems(this.itemConverter.bulkConvert(group.getItems()));
         }
         return groupDTO;
+    }
+
+    @Override
+    public List<GroupDTO> convert(List<Group> groups) {
+        return groups.stream().map(group -> {
+            GroupDTO groupDTO = new GroupDTO();
+            groupDTO.setId(group.getId());
+            groupDTO.setName(group.getName());
+            return groupDTO;
+        }).collect(Collectors.toList());
     }
 }

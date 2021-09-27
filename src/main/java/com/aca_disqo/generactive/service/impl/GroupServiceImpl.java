@@ -63,7 +63,7 @@ public class GroupServiceImpl implements GroupService {
         group.setName(groupDTO.getName());
         if (groupDTO.getParentId() != null) {
             Group parentGroup = get(groupDTO.getParentId());
-            parentGroup.getSubGroups().add(group);
+            parentGroup.addSubGroup(group);
             group.setParentGroup(parentGroup);
         }
         return group;

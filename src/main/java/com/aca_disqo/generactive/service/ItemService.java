@@ -15,7 +15,7 @@ public interface ItemService {
 
     Item update(Long id, ItemDTO itemDTO);
 
-    void deleteById(Long id);
+    Boolean deleteById(Long id);
 
     List<Item> findItemsByPriceRange(int priceFrom, int priceTo);
 

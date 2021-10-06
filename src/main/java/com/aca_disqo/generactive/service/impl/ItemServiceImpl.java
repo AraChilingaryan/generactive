@@ -1,6 +1,5 @@
 package com.aca_disqo.generactive.service.impl;
 
-import com.aca_disqo.generactive.context.ApplicationContext;
 import com.aca_disqo.generactive.controller.dto.ItemDTO;
 import com.aca_disqo.generactive.repository.ItemRepository;
 import com.aca_disqo.generactive.repository.model.Group;
@@ -8,37 +7,31 @@ import com.aca_disqo.generactive.repository.model.Item;
 import com.aca_disqo.generactive.service.GroupService;
 import com.aca_disqo.generactive.service.ItemService;
 import com.aca_disqo.generactive.utils.Currency;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ItemServiceImpl implements ItemService {
 
     private final GroupService groupService;
     private final ItemRepository itemRepository;
-    private static ItemService itemService;
 
-    private ItemServiceImpl(GroupService groupService1, ItemRepository itemRepository) {
+    public ItemServiceImpl(GroupService groupService1,
+                           ItemRepository itemRepository) {
         this.groupService = groupService1;
         this.itemRepository = itemRepository;
     }
 
-
-    public static ItemService getInstance() {
-        if (itemService == null) {
-            itemService = new ItemServiceImpl(ApplicationContext.getInstance().getGroupService(),
-                    ApplicationContext.getInstance().getItemRepository());
-        }
-        return itemService;
-    }
-
     @Override
     public List<Item> findALl() {
-        return this.itemRepository.getAll();
+        return this.itemRepository.findAll();
     }
 
     @Override
     public Item findItemBYId(Long id) {
-        return this.itemRepository.getItemById(id);
+        return this.itemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Not found item by this id"));
     }
 
     @Override
@@ -52,7 +45,8 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item update(Long id, ItemDTO itemDTO) {
-        final Item item = this.itemRepository.getItemById(id);
+        final Item item = this.itemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Not found item by this id"));;
         item.setBasePrice(itemDTO.getPrice());
         item.setGroup(groupService.get(itemDTO.getGroupId()));
         item.setImageUrl(itemDTO.getImageUrl());
@@ -61,24 +55,29 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public Boolean deleteById(Long id) {
         itemRepository.deleteById(id);
+        return itemRepository.existsById(id);
     }
 
     @Override
     public List<Item> findItemsByPriceRange(int priceFrom, int priceTo) {
-        return this.itemRepository.findItemsByPriceRange(priceFrom, priceTo);
+        //return this.itemRepository.findItemsByPriceRange(priceFrom, priceTo);
+        return null;
     }
 
     @Override
     public List<Item> findItemByGroup(Long parentGroupId) {
-        return itemRepository.findItemByGroup(groupService.get(parentGroupId));
+       // return itemRepository.findItemByGroup(groupService.get(parentGroupId));
+        return null;
     }
 
     @Override
     public Item findHighestPricedItem() {
-        return itemRepository.findHighestPricedItem();
+     //   return itemRepository.findHighestPricedItem();
+        return null;
     }
+
 
 
     private Item buildItemFrom(ItemDTO itemDTO) {

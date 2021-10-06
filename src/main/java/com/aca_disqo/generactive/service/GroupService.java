@@ -16,7 +16,7 @@ public interface GroupService {
 
     List<Group> getAll();
 
-    void deleteById(Long id);
+    Boolean deleteById(Long id);
 
     Group findGroupByName(String name);
 

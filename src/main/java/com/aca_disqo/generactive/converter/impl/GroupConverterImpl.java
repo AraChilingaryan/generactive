@@ -4,24 +4,18 @@ import com.aca_disqo.generactive.controller.dto.GroupDTO;
 import com.aca_disqo.generactive.converter.GroupConverter;
 import com.aca_disqo.generactive.converter.ItemConverter;
 import com.aca_disqo.generactive.repository.model.Group;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class GroupConverterImpl implements GroupConverter {
 
     private final ItemConverter itemConverter;
-    private static GroupConverter groupConverter;
 
     public GroupConverterImpl(ItemConverter itemConverter) {
         this.itemConverter = itemConverter;
-    }
-
-    public static GroupConverter getInstance() {
-        if (groupConverter == null) {
-            groupConverter = new GroupConverterImpl(ItemConverterImpl.getInstance());
-        }
-        return groupConverter;
     }
 
     @Override

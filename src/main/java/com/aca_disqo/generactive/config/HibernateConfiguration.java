@@ -1,38 +1,55 @@
 package com.aca_disqo.generactive.config;
 
-import com.aca_disqo.generactive.repository.model.Group;
-import com.aca_disqo.generactive.repository.model.Item;
 import com.aca_disqo.generactive.utils.DatabaseConfigurationUtil;
-import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
+@EnableJpaRepositories(basePackages = {"com.aca_disqo.generactive.repository"})
+@EnableTransactionManagement
 public class HibernateConfiguration {
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
+        LocalContainerEntityManagerFactoryBean em
+                = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(dataSource);
+        em.setPackagesToScan("com.aca_disqo.generactive");
 
+        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        em.setJpaVendorAdapter(vendorAdapter);
+        em.setJpaProperties(hibernateProperties());
+
+        return em;
+    }
 
     @Bean
-    public SessionFactory sessionFactory() {
-        return configure().buildSessionFactory();
+    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(entityManagerFactory);
+
+        return transactionManager;
     }
 
-    public org.hibernate.cfg.Configuration configure() {
-        org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration();
-        configuration.addProperties(hibernateProperties());
-        addAnnotatedClasses(configuration);
-
-        return configuration;
+    @Bean
+    public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
+        return new PersistenceExceptionTranslationPostProcessor();
     }
 
+    @Bean("hibernateProperties")
     public Properties hibernateProperties() {
         return DatabaseConfigurationUtil
                 .readProperties("hibernate.properties");
-    }
-
-    private void addAnnotatedClasses(org.hibernate.cfg.Configuration configuration) {
-        configuration.addAnnotatedClass(Item.class);
-        configuration.addAnnotatedClass(Group.class);
     }
 }

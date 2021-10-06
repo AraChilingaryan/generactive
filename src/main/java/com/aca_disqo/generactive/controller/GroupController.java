@@ -1,88 +1,52 @@
 package com.aca_disqo.generactive.controller;
 
-import com.aca_disqo.generactive.config.ApplicationContainer;
 import com.aca_disqo.generactive.controller.dto.GroupDTO;
-import com.aca_disqo.generactive.controller.utils.ErrorEntity;
-import com.aca_disqo.generactive.controller.utils.HttpConstants;
 import com.aca_disqo.generactive.converter.GroupConverter;
-import com.aca_disqo.generactive.converter.impl.GroupConverterImpl;
-import com.aca_disqo.generactive.repository.model.Group;
 import com.aca_disqo.generactive.service.GroupService;
-import com.aca_disqo.generactive.service.impl.GroupServiceImpl;
-import com.aca_disqo.generactive.utils.URLUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.stream.Collectors;
+import java.util.List;
 
 
-@WebServlet(name = "GroupServlet", urlPatterns = "/groups/*")
-public class GroupController extends HttpServlet {
+@RestController("/group")
+public class GroupController {
 
-    private final GroupService groupService = ApplicationContainer.applicationContext.getBean(GroupServiceImpl.class);
-    private final GroupConverter converter = ApplicationContainer.applicationContext.getBean(GroupConverterImpl.class);
+    private final GroupService groupService;
+    private final GroupConverter groupConverter;
 
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Long groupId = URLUtils.getLastPathSegment(req, resp);
-        resp.getWriter().write(objectMapper.writeValueAsString(converter.convert(this.groupService.get(groupId))));
+    public GroupController(GroupService groupService, GroupConverter groupConverter) {
+        this.groupService = groupService;
+        this.groupConverter = groupConverter;
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        if (!req.getContentType().equals(HttpConstants.ContentType.APPLICATION_JSON)) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "not_supported_format");
-        }
-
-        BufferedReader bufferedReader = req.getReader();
-        String body = bufferedReader.lines().collect(Collectors.joining());
-
-        try {
-            GroupDTO group = objectMapper.readValue(body, GroupDTO.class);
-            Group group1 = groupService.create(group);
-            resp.getWriter().write(objectMapper.writeValueAsString(converter.convert(group1)));
-        } catch (RuntimeException e) {
-            ErrorEntity errorEntity = new ErrorEntity("json_parse_failed:" + e.getMessage());
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write(objectMapper.writeValueAsString(errorEntity));
-        }
+    @GetMapping()
+    public ResponseEntity<List<? extends GroupDTO>> getAll() {
+        return ResponseEntity.ok(groupConverter.convert(groupService.getAll()));
     }
 
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Long id = URLUtils.getLastPathSegment(req, resp);
-        this.groupService.deleteById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<GroupDTO> getGroupById(@PathVariable Long id){
+        return ResponseEntity.ok(groupConverter.convert(groupService.get(id)));
     }
 
-    @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Long id = URLUtils.getLastPathSegment(req, resp);
-        final ObjectMapper objectMapper = new ObjectMapper();
-        if (!req.getContentType().equals(HttpConstants.ContentType.APPLICATION_JSON)) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "not_supported_format");
-        }
+    @GetMapping("/search")
+    public ResponseEntity<GroupDTO> getGroupById(@RequestParam String name){
+        return ResponseEntity.ok(groupConverter.convert(groupService.findGroupByName(name)));
+    }
 
-        BufferedReader bufferedReader = req.getReader();
-        String body = bufferedReader.lines().collect(Collectors.joining());
+    @PostMapping()
+    public ResponseEntity<GroupDTO> create(@RequestBody GroupDTO groupDTO){
+        return ResponseEntity.ok(groupConverter.convert(groupService.create(groupDTO)));
+    }
 
-        try {
-            GroupDTO group = objectMapper.readValue(body, GroupDTO.class);
-            Group group1 = groupService.update(id, group);
-            resp.getWriter().write(objectMapper.writeValueAsString(converter.convert(group1)));
-        } catch (RuntimeException e) {
-            ErrorEntity errorEntity = new ErrorEntity("json_parse_failed:" + e.getMessage());
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write(objectMapper.writeValueAsString(errorEntity));
-        }
+    @PutMapping()
+    public ResponseEntity<GroupDTO> update(@PathVariable Long id, @RequestBody GroupDTO groupDTO){
+        return ResponseEntity.ok(groupConverter.convert(groupService.update(id,groupDTO)));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Boolean> delete(@PathVariable Long id){
+        return ResponseEntity.ok(groupService.deleteById(id));
     }
 }
